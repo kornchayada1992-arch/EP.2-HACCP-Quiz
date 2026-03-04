@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HACCP & Food Safety — สยาม โทเซลโล</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #D62828;
+  --dark-red: #9B1B1B;
+  --yellow: #F7B731;
+  --navy: #0D1B2A;
+  --navy-mid: #122030;
+  --navy-light: #1A2F45;
+  --navy-card: #1E3550;
+  --white: #F8FAFC;
+  --gray: #8A9BB0;
+  --success: #22C55E;
+  --fail: #EF4444;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--navy);
+  font-family: 'Noto Sans Thai', sans-serif;
+  color: var(--white);
+  min-height: 100vh;
+}
+
+/* ── SETUP BANNER ── */
+#setup-banner {
+  background: #0a1520;
+  border-bottom: 2px solid var(--yellow);
+  padding: 14px 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.setup-left { display:flex; align-items:center; gap:12px; }
+.setup-text h3 { font-size:13px; font-weight:700; color:var(--yellow); }
+.setup-text p  { font-size:12px; color:var(--gray); margin-top:2px; }
+.status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+.status-dot.on  { background:var(--success); box-shadow:0 0 6px var(--success); }
+.status-dot.off { background:var(--gray); }
+.btn-yellow {
+  background:var(--yellow); color:var(--navy);
+  border:none; padding:8px 20px; border-radius:20px;
+  font-family:'Noto Sans Thai',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+}
+.btn-yellow:hover { transform:translateY(-1px); box-shadow:0 4px 14px rgba(247,183,49,.4); }
+.btn-ghost {
+  background:transparent; border:1px solid var(--gray); color:var(--gray);
+  padding:8px 16px; border-radius:20px;
+  font-family:'Noto Sans Thai',sans-serif; font-size:12px; cursor:pointer;
+}
+
+/* ── MODAL ── */
+.modal-bg {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.78); z-index:999;
+  align-items:center; justify-content:center; padding:20px;
+}
+.modal-bg.open { display:flex; }
+.modal-box {
+  background:var(--navy-mid);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:20px; padding:36px;
+  max-width:600px; width:100%;
+  max-height:88vh; overflow-y:auto;
+}
+.modal-box h2 { font-size:22px; font-weight:700; color:var(--yellow); margin-bottom:6px; }
+.modal-sub { font-size:13px; color:var(--gray); margin-bottom:24px; }
+.f-group { margin-bottom:18px; }
+.f-group label { display:block; font-size:12px; font-weight:700; color:var(--gray); margin-bottom:7px; letter-spacing:.8px; }
+.f-group input,.f-group textarea,.f-group select {
+  width:100%; background:rgba(255,255,255,.06);
+  border:1.5px solid rgba(255,255,255,.12); border-radius:10px;
+  padding:11px 15px; font-family:'Noto Sans Thai',sans-serif;
+  font-size:14px; color:white; outline:none; transition:border-color .2s;
+}
+.f-group input:focus,.f-group textarea:focus { border-color:var(--yellow); }
+.f-group textarea { min-height:90px; resize:vertical; }
+.hint-box {
+  background:rgba(247,183,49,.07); border:1px solid rgba(247,183,49,.2);
+  border-radius:10px; padding:16px; font-size:12px;
+  color:rgba(255,255,255,.72); line-height:1.8; margin-bottom:20px;
+}
+.hint-box strong { color:var(--yellow); }
+.code-block {
+  font-family:monospace; background:rgba(0,0,0,.35);
+  display:block; padding:12px; border-radius:7px;
+  margin-top:8px; font-size:11px; line-height:1.7;
+  white-space:pre-wrap; color:#aef; word-break:break-all;
+}
+.modal-acts { display:flex; gap:10px; justify-content:flex-end; margin-top:4px; }
+.btn-save {
+  background:var(--red); color:white; border:none;
+  padding:12px 28px; border-radius:10px;
+  font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:700; cursor:pointer;
+}
+.btn-cancel {
+  background:transparent; border:1.5px solid rgba(255,255,255,.18); color:var(--gray);
+  padding:12px 20px; border-radius:10px;
+  font-family:'Noto Sans Thai',sans-serif; font-size:14px; cursor:pointer;
+}
+
+/* ── WRAP ── */
+.page { max-width:980px; margin:0 auto; }
+
+/* ── STICKY NAV ── */
+.tabs {
+  display:flex; background:var(--navy-mid);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  position:sticky; top:0; z-index:40; overflow-x:auto;
+}
+.tab {
+  padding:14px 30px; font-size:13px; font-weight:700;
+  color:var(--gray); cursor:pointer; white-space:nowrap;
+  border-bottom:3px solid transparent; background:none;
+  border-top:none; border-left:none; border-right:none;
+  font-family:'Noto Sans Thai',sans-serif; transition:all .2s;
+}
+.tab:hover { color:white; }
+.tab.on { color:var(--yellow); border-bottom-color:var(--yellow); }
+
+.sec { display:none; }
+.sec.on { display:block; }
+
+/* ── HEADER ── */
+.hdr {
+  background:linear-gradient(135deg,#6a0000 0%,var(--dark-red) 45%,#e03030 100%);
+  padding:48px 52px 40px; position:relative; overflow:hidden;
+}
+.hdr::before {
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 18px,rgba(255,255,255,.018) 18px,rgba(255,255,255,.018) 36px);
+}
+.hdr::after {
+  content:'SAFETY'; font-family:'Bebas Neue',sans-serif;
+  font-size:240px; position:absolute; right:-30px; top:-20px;
+  opacity:.045; color:white; letter-spacing:-4px; line-height:1; pointer-events:none;
+}
+.hdr-badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.22);
+  padding:5px 15px; border-radius:20px; font-size:11px; font-weight:700;
+  letter-spacing:1.5px; color:rgba(255,255,255,.85); margin-bottom:14px;
+  text-transform:uppercase; position:relative;
+}
+.hdr h1 {
+  font-family:'Bebas Neue',sans-serif; font-size:70px;
+  letter-spacing:4px; line-height:.95; position:relative;
+}
+.hdr h1 span { color:var(--yellow); }
+.hdr .sub {
+  font-size:16px; color:rgba(255,255,255,.8); margin-top:12px;
+  font-weight:300; position:relative;
+}
+.hdr-meta { margin-top:18px; display:flex; gap:12px; flex-wrap:wrap; position:relative; }
+.meta-pill {
+  background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.15);
+  padding:4px 13px; border-radius:20px; font-size:11px; color:rgba(255,255,255,.7);
+}
+
+/* ── BODY ── */
+.bd { padding:42px 52px; }
+
+.s-title {
+  font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:2px;
+  color:var(--yellow); margin-bottom:20px;
+  display:flex; align-items:center; gap:12px;
+}
+.s-title::after {
+  content:''; flex:1; height:2px;
+  background:linear-gradient(to right,rgba(247,183,49,.4),transparent);
+}
+
+/* ── INCIDENT BOX ── */
+.incident {
+  background:linear-gradient(135deg,rgba(214,40,40,.18),rgba(214,40,40,.05));
+  border:1.5px solid rgba(214,40,40,.5); border-radius:16px;
+  padding:24px 28px; margin-bottom:32px;
+}
+.inc-head {
+  font-size:18px; font-weight:900; color:white;
+  margin-bottom:12px; display:flex; align-items:center; gap:10px;
+}
+.inc-sub { font-size:13px; color:rgba(255,255,255,.72); line-height:1.7; margin-bottom:14px; }
+.tag-row { display:flex; gap:10px; flex-wrap:wrap; }
+.tag {
+  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700;
+}
+.tag.red { background:rgba(214,40,40,.25); border:1px solid rgba(214,40,40,.5); color:#ff9898; }
+.tag.yellow { background:rgba(247,183,49,.15); border:1px solid rgba(247,183,49,.4); color:var(--yellow); }
+
+/* ── 6 STEPS ── */
+.steps-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:16px; margin-bottom:36px;
+}
+.step-card {
+  background:var(--navy-card); border-radius:14px;
+  padding:22px 16px; border:1px solid rgba(255,255,255,.06);
+  text-align:center; transition:border-color .2s;
+}
+.step-card:hover { border-color:rgba(247,183,49,.3); }
+.step-num {
+  width:40px; height:40px; background:var(--red); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:20px;
+  margin:0 auto 12px; letter-spacing:1px;
+}
+.step-icon { font-size:26px; margin-bottom:10px; }
+.step-card h4 { font-size:13px; font-weight:700; color:var(--yellow); margin-bottom:6px; }
+.step-card p { font-size:12px; color:rgba(255,255,255,.62); line-height:1.6; }
+
+.warning-bar {
+  background:rgba(239,68,68,.1); border:1.5px solid rgba(239,68,68,.35);
+  border-radius:10px; padding:14px 18px; margin-bottom:32px;
+  display:flex; align-items:center; gap:12px;
+  font-size:13px; font-weight:700; color:#f87171;
+}
+
+/* ── PROHIBIT ── */
+.prohibit-hero {
+  background:linear-gradient(135deg,rgba(239,68,68,.14),rgba(239,68,68,.04));
+  border:2px solid rgba(239,68,68,.38); border-radius:16px;
+  padding:28px; margin-bottom:24px; text-align:center;
+}
+.prohibit-hero .ph-icon { font-size:52px; margin-bottom:12px; }
+.prohibit-hero h3 { font-size:22px; font-weight:900; line-height:1.45; color:white; margin-bottom:10px; }
+.prohibit-hero .ph-sub { font-size:13px; color:rgba(255,255,255,.6); }
+
+.reason-list { margin-bottom:24px; }
+.reason-item {
+  display:flex; gap:14px; align-items:flex-start;
+  padding:13px 0; border-bottom:1px solid rgba(255,255,255,.06);
+}
+.reason-item:last-child { border-bottom:none; }
+.ri-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+.reason-item strong { font-size:14px; color:white; display:block; margin-bottom:3px; }
+.reason-item span { font-size:13px; color:rgba(255,255,255,.6); line-height:1.55; }
+
+.allowed-box {
+  background:rgba(34,197,94,.1); border:1.5px solid rgba(34,197,94,.3);
+  border-radius:12px; padding:20px 24px; display:flex;
+  align-items:center; gap:16px; margin-bottom:32px;
+}
+.allowed-box .al-icon { font-size:34px; }
+.allowed-box h4 { font-size:15px; font-weight:700; color:var(--success); margin-bottom:4px; }
+.allowed-box p { font-size:13px; color:rgba(255,255,255,.72); line-height:1.5; }
+
+/* ── CCP CARDS ── */
+.ccp-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:32px; }
+.ccp-card { background:var(--navy-card); border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.07); }
+.ccp-head { background:var(--red); padding:16px 22px; display:flex; align-items:center; gap:12px; }
+.ccp-badge { background:white; color:var(--red); font-weight:900; font-size:12px; padding:3px 10px; border-radius:6px; }
+.ccp-head h3 { font-size:15px; font-weight:700; line-height:1.35; }
+.ccp-body { padding:18px 22px; }
+.irow { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:13px; }
+.irow:last-child { border-bottom:none; }
+.ilbl { color:var(--yellow); font-weight:700; min-width:110px; font-size:12px; flex-shrink:0; }
+.ival { color:rgba(255,255,255,.82); line-height:1.55; }
+
+/* ── VERIFICATION ── */
+.verif-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px; }
+.verif-card { background:var(--navy-card); border-radius:12px; padding:18px; border-left:4px solid var(--yellow); }
+.verif-card h4 { font-size:13px; font-weight:700; color:var(--yellow); margin-bottom:8px; }
+.verif-card p { font-size:12px; color:rgba(255,255,255,.7); line-height:1.65; }
+
+hr.div { border:none; height:1px; background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent); margin:32px 0; }
+
+/* ── FOOTER BANNER ── */
+.foot-banner {
+  background:linear-gradient(135deg,var(--dark-red),var(--red));
+  padding:28px 40px; text-align:center;
+}
+.foot-banner .ft { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:3px; }
+.foot-banner .fs { font-size:16px; font-weight:700; color:rgba(255,255,255,.85); margin-top:4px; }
+
+/* ── QUIZ ── */
+.quiz-wrap { background:var(--navy-mid); padding:46px 52px; }
+.quiz-hdr { text-align:center; margin-bottom:32px; }
+.quiz-hdr h2 {
+  font-family:'Bebas Neue',sans-serif; font-size:50px;
+  letter-spacing:3px; color:var(--yellow); margin-bottom:8px;
+}
+.quiz-hdr p { color:var(--gray); font-size:14px; }
+
+/* Employee form */
+.emp-form {
+  background:var(--navy-card); border-radius:16px;
+  padding:26px; margin-bottom:30px;
+  border:1px solid rgba(255,255,255,.07);
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+}
+.ef label { display:block; font-size:11px; font-weight:700; color:var(--gray); margin-bottom:6px; letter-spacing:.8px; }
+.ef input,.ef select {
+  width:100%; background:rgba(255,255,255,.07);
+  border:1.5px solid rgba(255,255,255,.1); border-radius:8px;
+  padding:10px 13px; font-family:'Noto Sans Thai',sans-serif;
+  font-size:14px; color:white; outline:none;
+}
+.ef input:focus,.ef select:focus { border-color:var(--yellow); }
+.ef select option { background:var(--navy); }
+.ef.full { grid-column:1/-1; }
+
+/* Progress */
+.prog-wrap { margin-bottom:26px; }
+.prog-info { display:flex; justify-content:space-between; font-size:12px; color:var(--gray); margin-bottom:7px; }
+.prog-track { height:5px; background:rgba(255,255,255,.08); border-radius:3px; overflow:hidden; }
+.prog-fill { height:100%; background:linear-gradient(to right,var(--yellow),var(--red)); width:0%; transition:width .4s ease; border-radius:3px; }
+
+/* Q cards */
+.q-card {
+  background:rgba(255,255,255,.03); border:1.5px solid rgba(255,255,255,.07);
+  border-radius:16px; padding:26px; margin-bottom:16px; transition:border-color .3s;
+}
+.q-card.ans { border-color:rgba(247,183,49,.25); }
+.q-num { font-size:11px; font-weight:700; color:var(--yellow); letter-spacing:2px; margin-bottom:10px; }
+.q-cat {
+  display:inline-block; background:rgba(247,183,49,.1);
+  border:1px solid rgba(247,183,49,.22); color:var(--yellow);
+  font-size:10px; font-weight:700; padding:2px 10px; border-radius:10px;
+  letter-spacing:1px; margin-bottom:12px; text-transform:uppercase;
+}
+.q-text { font-size:15px; font-weight:600; line-height:1.65; margin-bottom:18px; }
+.opts { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+.opt {
+  background:rgba(255,255,255,.05); border:1.5px solid rgba(255,255,255,.1);
+  border-radius:10px; padding:11px 13px; text-align:left; cursor:pointer;
+  font-family:'Noto Sans Thai',sans-serif; font-size:13px;
+  color:rgba(255,255,255,.8); transition:all .18s; line-height:1.5;
+}
+.opt:hover:not(:disabled) {
+  background:rgba(247,183,49,.1); border-color:var(--yellow);
+  color:white; transform:translateY(-1px);
+}
+.opt.sel { background:rgba(247,183,49,.15); border-color:var(--yellow); color:white; }
+.opt.correct { background:rgba(34,197,94,.2); border-color:var(--success); color:white; }
+.opt.wrong { background:rgba(239,68,68,.2); border-color:var(--fail); color:rgba(255,255,255,.7); }
+.opt:disabled { cursor:default; transform:none; }
+.ol {
+  display:inline-flex; width:22px; height:22px; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.1); border-radius:5px; font-size:11px; font-weight:800;
+  margin-right:7px; vertical-align:middle; flex-shrink:0;
+}
+.fb {
+  margin-top:12px; padding:10px 14px; border-radius:8px;
+  font-size:12px; font-weight:600; display:none; line-height:1.6;
+}
+.fb.show { display:block; }
+.fb.ok  { background:rgba(34,197,94,.12); color:#4ade80; border-left:3px solid var(--success); }
+.fb.bad { background:rgba(239,68,68,.12); color:#f87171; border-left:3px solid var(--fail); }
+
+/* Submit / Result */
+.quiz-foot { text-align:center; margin-top:32px; }
+#submit-btn {
+  background:linear-gradient(135deg,var(--red),var(--dark-red));
+  color:white; border:none; padding:16px 52px;
+  border-radius:50px; font-family:'Noto Sans Thai',sans-serif;
+  font-size:16px; font-weight:700; cursor:pointer;
+  box-shadow:0 4px 24px rgba(214,40,40,.4); transition:all .2s;
+}
+#submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 36px rgba(214,40,40,.5); }
+#submit-btn:disabled { opacity:.4; cursor:default; transform:none; }
+
+#result-box {
+  display:none; margin-top:34px;
+  background:var(--navy-card); border-radius:20px;
+  padding:38px; text-align:center;
+  border:1px solid rgba(255,255,255,.08);
+}
+.score-ring {
+  width:130px; height:130px; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  margin:0 auto 18px; border:5px solid;
+}
+.sr-num { font-family:'Bebas Neue',sans-serif; font-size:48px; line-height:1; }
+.sr-tot { font-size:15px; opacity:.65; }
+.res-pct { font-family:'Bebas Neue',sans-serif; font-size:62px; margin:10px 0; }
+.res-msg { font-size:20px; font-weight:700; margin-bottom:8px; }
+.res-sub { font-size:14px; color:var(--gray); line-height:1.6; }
+
+#submit-status {
+  margin-top:18px; padding:12px 18px; border-radius:10px;
+  font-size:13px; font-weight:600; display:none;
+}
+#submit-status.sending { background:rgba(247,183,49,.12); color:var(--yellow); display:block; }
+#submit-status.success { background:rgba(34,197,94,.12); color:var(--success); display:block; }
+#submit-status.err     { background:rgba(239,68,68,.12); color:var(--fail); display:block; }
+
+#retry-btn {
+  margin-top:18px; background:transparent;
+  border:2px solid var(--yellow); color:var(--yellow);
+  padding:11px 36px; border-radius:50px;
+  font-family:'Noto Sans Thai',sans-serif; font-size:14px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+}
+#retry-btn:hover { background:var(--yellow); color:var(--navy); }
+
+@media(max-width:680px){
+  .ccp-grid,.steps-grid,.verif-grid,.opts,.emp-form{grid-template-columns:1fr;}
+  .bd,.quiz-wrap{padding:26px 20px;}
+  .hdr{padding:34px 22px 28px;}
+  .hdr h1{font-size:46px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SETUP BANNER ══ -->
+<div id="setup-banner">
+  <div class="setup-left">
+    <div style="font-size:22px">⚙️</div>
+    <div class="setup-text">
+      <h3>ตั้งค่าการบันทึกผลแบบทดสอบ → Google Sheets</h3>
+      <p>
+        <span class="status-dot off" id="conn-dot"></span>
+        <span id="conn-label">ยังไม่ได้เชื่อมต่อ — ผลจะไม่ถูกบันทึก</span>
+      </p>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+    <button class="btn-yellow" onclick="openSetup()">🔗 เชื่อมต่อ Google Sheets</button>
+    <button class="btn-ghost" onclick="document.getElementById('setup-banner').style.display='none'">ซ่อน</button>
+  </div>
+</div>
+
+<!-- ══ SETUP MODAL ══ -->
+<div class="modal-bg" id="setup-modal">
+  <div class="modal-box">
+    <h2>🔗 ตั้งค่า Google Sheets</h2>
+    <p class="modal-sub">ทำครั้งเดียว ผลทุกคนจะไหลเข้า Spreadsheet อัตโนมัติ ไม่ต้อง Google Form แยกต่างหาก</p>
+
+    <div class="hint-box">
+      <strong>📋 ขั้นตอน (ใช้เวลา ~8 นาที):</strong><br><br>
+      <strong>1.</strong> เปิด <strong>Google Sheets</strong> → สร้างไฟล์ใหม่<br>
+      <strong>2.</strong> ไปที่ <strong>Extensions → Apps Script</strong><br>
+      <strong>3.</strong> ลบโค้ดเดิมทั้งหมด แล้ววางโค้ดนี้:<br>
+      <span class="code-block">function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName("ผลแบบทดสอบ") || ss.insertSheet("ผลแบบทดสอบ");
+  if (sh.getLastRow() === 0) {
+    sh.appendRow(["วันที่","เวลา","ชื่อ-นามสกุล","แผนก","ตำแหน่ง",
+                  "คะแนน","เปอร์เซ็นต์","ผลการทดสอบ"]);
+    sh.getRange(1,1,1,8).setFontWeight("bold")
+      .setBackground("#D62828").setFontColor("white");
+  }
+  var d = JSON.parse(e.postData.contents);
+  sh.appendRow([d.date,d.time,d.name,d.dept,d.position,
+                d.score,d.percent,d.result]);
+  return ContentService.createTextOutput("OK")
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+function doGet(e) {
+  return ContentService.createTextOutput("Connected!")
+    .setMimeType(ContentService.MimeType.TEXT);
+}</span>
+      <strong>4.</strong> กด <strong>Deploy → New deployment</strong><br>
+      <strong>5.</strong> Type: <strong>Web app</strong> | Execute as: <strong>Me</strong> | Access: <strong>Anyone</strong><br>
+      <strong>6.</strong> กด Deploy → คัดลอก <strong>Web app URL</strong> มาวางด้านล่าง
+    </div>
+
+    <div class="f-group">
+      <label>🔗 Web App URL (จาก Apps Script)</label>
+      <input type="url" id="gs-url" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+    </div>
+    <div class="f-group">
+      <label>🏢 ชื่อบริษัท (แสดงบน Poster)</label>
+      <input type="text" id="cfg-company" value="บริษัท สยาม โทเซลโล จำกัด">
+    </div>
+    <div class="f-group">
+      <label>👥 รายชื่อแผนก (ใส่ทีละบรรทัด)</label>
+      <textarea id="cfg-depts">ฝ่ายผลิต
+ฝ่าย QA / QC
+ฝ่ายคลังสินค้า
+ฝ่ายวิศวกรรม
+ฝ่าย HR / ธุรการ
+ฝ่ายจัดซื้อ</textarea>
+    </div>
+    <div class="modal-acts">
+      <button class="btn-cancel" onclick="closeSetup()">ยกเลิก</button>
+      <button class="btn-save" onclick="saveSetup()">💾 บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab on"  onclick="showTab('poster')">🚨 Food Safety Control</button>
+    <button class="tab"     onclick="showTab('haccp')">🔬 HACCP Plan (CCP)</button>
+    <button class="tab"     onclick="showTab('quiz')">📝 แบบทดสอบ</button>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TAB 1 : FOOD SAFETY CONTROL NOTICE
+       ══════════════════════════════════════ -->
+  <div id="tab-poster" class="sec on">
+
+    <div class="hdr">
+      <div class="hdr-badge">🚨 Physical Hazard Control</div>
+      <h1>FOOD <span>SAFETY</span><br>CONTROL NOTICE</h1>
+      <div class="sub">การควบคุมอันตรายทางกายภาพ — กรณีใบมีด / คัตเตอร์แตกหักระหว่างการใช้งาน<br>
+        <span id="company-disp">บริษัท สยาม โทเซลโล จำกัด</span>
+      </div>
+      <div class="hdr-meta">
+        <div class="meta-pill">📄 STD-QAS-087F Rev.00</div>
+        <div class="meta-pill">📅 1 พฤศจิกายน 2567</div>
+        <div class="meta-pill">📍 ปลวกแดง ระยอง</div>
+      </div>
+    </div>
+
+    <div class="bd">
+
+      <!-- INCIDENT -->
+      <div class="s-title">กรณีใบมีด / คัตเตอร์แตกหักระหว่างใช้งาน</div>
+      <div class="incident">
+        <div class="inc-head">⚠️ ถือเป็น Food Safety Incident</div>
+        <div class="inc-sub">
+          เมื่อพบใบมีดหรือคัตเตอร์แตก หัก หรือชำรุด ระหว่างกระบวนการผลิต
+          ถือว่าเป็นเหตุการณ์ที่ส่งผลต่อความปลอดภัยด้านอาหาร (Food Safety Incident)
+          และต้องดำเนินการทันทีตามระบบ HACCP โดยไม่รอช้า
+        </div>
+        <div class="tag-row">
+          <span class="tag red">⛔ Food Safety Incident</span>
+          <span class="tag red">⛔ Physical Hazard</span>
+          <span class="tag yellow">✅ ต้องปฏิบัติตาม HACCP ทันที</span>
+        </div>
+      </div>
+
+      <!-- 6 STEPS -->
+      <div class="s-title">พนักงานต้องปฏิบัติ 6 ขั้นตอน</div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-icon">🚫</div>
+          <h4>หยุดการผลิตทันที</h4>
+          <p>หยุดเครื่องจักรและหยุดผลิตทันที ห้ามปล่อยให้กระบวนการดำเนินต่อไปโดยเด็ดขาด</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-icon">📣</div>
+          <h4>แจ้งหัวหน้างาน</h4>
+          <p>แจ้งหัวหน้างาน / หัวหน้าฝ่ายผลิตทันที เพื่อตัดสินใจและดำเนินการต่อไป</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-icon">📦</div>
+          <h4>กักกันผลิตภัณฑ์</h4>
+          <p>กักกันผลิตภัณฑ์และวัตถุดิบทั้งหมดในล็อตที่เกี่ยวข้อง รอการตรวจสอบ</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-icon">🔍</div>
+          <h4>ค้นหาและเก็บชิ้นส่วน</h4>
+          <p>ค้นหาและเก็บเศษใบมีดให้ครบถ้วน 100% ส่ง QC ตรวจนับ บันทึกจำนวนชิ้นส่วนทุกชิ้น</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div class="step-icon">🧹</div>
+          <h4>ทำความสะอาดพื้นที่</h4>
+          <p>ทำความสะอาดพื้นที่และอุปกรณ์อย่างละเอียด ก่อนเริ่มงานใหม่ทุกครั้ง</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">6</div>
+          <div class="step-icon">📝</div>
+          <h4>บันทึกและป้องกันซ้ำ</h4>
+          <p>บันทึกเหตุการณ์ วิเคราะห์สาเหตุ และดำเนินการป้องกันการเกิดซ้ำลงในเอกสาร</p>
+        </div>
+      </div>
+
+      <div class="warning-bar">
+        ❗ ห้ามเริ่มการผลิตต่อ จนกว่าความเสี่ยงจะถูกควบคุมและได้รับการอนุญาตจากหัวหน้า
+      </div>
+
+      <hr class="div">
+
+      <!-- PROHIBIT -->
+      <div class="s-title">ข้อห้ามในพื้นที่การผลิต (Preventive Control)</div>
+      <div class="prohibit-hero">
+        <div class="ph-icon">🚫</div>
+        <h3>ห้ามนำหมุดเข็ม / หมุดโลหะ / วัตถุแหลมคมทุกชนิด<br>เข้ามาในพื้นที่การผลิต</h3>
+        <div class="ph-sub">ข้อห้ามนี้บังคับใช้กับทุกคนที่เข้าพื้นที่ผลิต โดยไม่มีข้อยกเว้น</div>
+      </div>
+
+      <div class="reason-list">
+        <div class="reason-item">
+          <div class="ri-icon">⚠️</div>
+          <div>
+            <strong>เป็น Physical Hazard ที่มีความเสี่ยงสูง</strong>
+            <span>วัตถุแหลมคมขนาดเล็กสามารถปนเปื้อนในผลิตภัณฑ์ได้โดยไม่รู้ตัว ส่งผลให้ผลิตภัณฑ์ไม่ปลอดภัย</span>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="ri-icon">🔍</div>
+          <div>
+            <strong>ไม่สามารถควบคุมการสูญหายได้</strong>
+            <span>หมุดเข็มและวัตถุโลหะขนาดเล็กยากต่อการตรวจพบและติดตาม หากหลุดหายในพื้นที่ผลิต</span>
+          </div>
+        </div>
+        <div class="reason-item">
+          <div class="ri-icon">📋</div>
+          <div>
+            <strong>ไม่สอดคล้องกับมาตรฐาน GHP / HACCP / FSSC 22000</strong>
+            <span>มาตรฐานความปลอดภัยด้านอาหารระดับสากลห้ามนำวัตถุอันตรายเข้าพื้นที่ผลิตโดยเด็ดขาด</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="allowed-box">
+        <div class="al-icon">✅</div>
+        <div>
+          <h4>ใช้อุปกรณ์ที่ปลอดภัยเท่านั้น</h4>
+          <p>อนุญาตให้ใช้ <strong>แม่เหล็ก / คลิปหนีบกระดาษแบบโลหะ</strong> ที่สามารถตรวจจับและติดตามได้เท่านั้น<br>
+          หากไม่แน่ใจ ให้ถามหัวหน้างานก่อนนำเข้าพื้นที่ทุกครั้ง</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="foot-banner">
+      <div class="ft">🎯 Food Safety คือความรับผิดชอบของทุกคน</div>
+      <div class="fs">พบความเสี่ยง = ต้องหยุด และแจ้งทันที</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TAB 2 : HACCP PLAN (CCP)
+       ══════════════════════════════════════ -->
+  <div id="tab-haccp" class="sec">
+
+    <div class="hdr">
+      <div class="hdr-badge">🔬 HACCP Plan</div>
+      <h1>HACCP <span>PLAN</span></h1>
+      <div class="sub">แผนการวิเคราะห์อันตรายและจุดวิกฤตที่ต้องควบคุม<br>
+        <span id="company-disp2">บริษัท สยาม โทเซลโล จำกัด</span>
+      </div>
+      <div class="hdr-meta">
+        <div class="meta-pill">📄 STD-QAS-087F Rev.00</div>
+        <div class="meta-pill">📅 1 พฤศจิกายน 2567</div>
+        <div class="meta-pill">🔬 2 จุด CCP</div>
+      </div>
+    </div>
+
+    <div class="bd">
+
+      <div class="incident" style="margin-bottom:32px;">
+        <div class="inc-head">🛡️ HACCP คืออะไร?</div>
+        <div class="inc-sub">
+          <strong>Hazard Analysis and Critical Control Points</strong> — ระบบการจัดการความปลอดภัยด้านอาหาร
+          ที่วิเคราะห์อันตรายที่อาจปนเปื้อนในผลิตภัณฑ์ และกำหนดจุดวิกฤต (CCP)
+          ที่ต้องควบคุมเพื่อป้องกันก่อนเกิดขึ้น ในโรงงานของเรามี <strong>2 จุด CCP หลัก</strong>
+        </div>
+        <div class="tag-row">
+          <span class="tag yellow">CCP1-P · Slitting Process</span>
+          <span class="tag yellow">CCP2-P · Re-Slit Process</span>
+        </div>
+      </div>
+
+      <div class="s-title">จุดวิกฤต (CCP) ที่ต้องควบคุม</div>
+      <div class="ccp-grid">
+        <div class="ccp-card">
+          <div class="ccp-head">
+            <div class="ccp-badge">CCP1-P</div>
+            <h3>Slitting Process<br>Automatic Slit &amp; Winding</h3>
+          </div>
+          <div class="ccp-body">
+            <div class="irow"><div class="ilbl">⚠️ อันตราย</div><div class="ival">เศษใบมีดแตก หัก หรือชำรุดจากการตัดม้วน Baby Roll</div></div>
+            <div class="irow"><div class="ilbl">📏 Critical Limit</div><div class="ival">สภาพใบมีด <strong>ต้องไม่แตก หัก หรือชำรุด</strong></div></div>
+            <div class="irow"><div class="ilbl">🔍 ตรวจสอบ (What)</div><div class="ival">ตรวจสอบสภาพใบมีดทุกครั้งที่เปลี่ยน Jumbo Roll</div></div>
+            <div class="irow"><div class="ilbl">📍 สถานที่ (How)</div><div class="ival">ตรวจสอบที่จุดปฏิบัติงาน โดยพนักงานผลิต</div></div>
+            <div class="irow"><div class="ilbl">🔄 สลับใบมีด</div><div class="ival">ทุก <strong>15 วัน</strong> ทุกตำแหน่ง (พิจารณาสภาพขอบม้วน)</div></div>
+            <div class="irow"><div class="ilbl">🔧 เปลี่ยนใบมีด</div><div class="ival">ทุก <strong>30 วัน</strong> ทุกตำแหน่ง (พิจารณาสภาพขอบม้วน)</div></div>
+            <div class="irow"><div class="ilbl">📋 บันทึก</div><div class="ival">FRM-PRS-018 (Daily Check) · FRM-PRS-022 (การเปลี่ยนใบมีด)</div></div>
+          </div>
+        </div>
+
+        <div class="ccp-card">
+          <div class="ccp-head">
+            <div class="ccp-badge">CCP2-P</div>
+            <h3>Re-Slit Process<br>Winding &amp; Manual Cutting</h3>
+          </div>
+          <div class="ccp-body">
+            <div class="irow"><div class="ilbl">⚠️ อันตราย</div><div class="ival">เศษใบมีดแตก หัก หรือชำรุดจากการตัดม้วน Baby Roll</div></div>
+            <div class="irow"><div class="ilbl">📏 Critical Limit</div><div class="ival">สภาพใบมีด <strong>ต้องไม่แตก หัก หรือชำรุด</strong></div></div>
+            <div class="irow"><div class="ilbl">🔍 ตรวจสอบ (What)</div><div class="ival">ตรวจสอบทุกม้วน ตลอดหน้ากว้างและความยาวของม้วน</div></div>
+            <div class="irow"><div class="ilbl">📍 สถานที่ (How)</div><div class="ival">ตรวจสอบที่จุดปฏิบัติงาน โดยพนักงานผลิต</div></div>
+            <div class="irow"><div class="ilbl">🔄 สลับใบมีด</div><div class="ival">ทุก <strong>90 วัน</strong> (มี.ค. และ ก.ย.) ทุกตำแหน่งที่ใช้งาน</div></div>
+            <div class="irow"><div class="ilbl">🔧 เปลี่ยนใบมีด</div><div class="ival">ทุก <strong>180 วัน</strong> (มิ.ย. และ ธ.ค.) ทุกตำแหน่งที่ใช้งาน</div></div>
+            <div class="irow"><div class="ilbl">📋 บันทึก</div><div class="ival">Daily Re-Slit Record (Excel) · FRM-PRS-027</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Corrective Action -->
+      <div class="s-title">การแก้ไขเมื่อพบใบมีดผิดปกติ</div>
+      <div class="steps-grid" style="margin-bottom:32px;">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-icon">⛔</div>
+          <h4>หยุดเครื่อง / หยุดผลิต</h4>
+          <p>ทำทันทีที่พบว่าใบมีดแตก หัก ก่อนดำเนินการอื่นใดทั้งสิ้น</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-icon">📣</div>
+          <h4>แจ้งหัวหน้าฝ่ายผลิต</h4>
+          <p>แจ้งทันทีเพื่อให้กักผลิตภัณฑ์ในล็อตที่มีปัญหาทั้งหมด</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-icon">🔍</div>
+          <h4>เก็บชิ้นส่วนให้ครบ</h4>
+          <p>กั้นบริเวณ เก็บชิ้นส่วนทุกชิ้น ใส่ถุงพลาสติกปิดมิดชิด นำทิ้ง Operation Room</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-icon">🧹</div>
+          <h4>ทำความสะอาดพื้นที่</h4>
+          <p>ทำความสะอาดอย่างระมัดระวัง แล้วเปลี่ยนใบมีดใหม่เข้าไปแทน</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div class="step-icon">📦</div>
+          <h4>แจ้ง QC กักกันสินค้า</h4>
+          <p>แจ้ง QC ติดป้ายกักกัน ร่วมยืนยันล็อตที่มีปัญหา และวิเคราะห์หาสาเหตุ</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">6</div>
+          <div class="step-icon">📝</div>
+          <h4>บันทึกและรายงาน</h4>
+          <p>บันทึกลง FRM-QCS-011 และ FRM-PRS-022/027 ทุกครั้งที่เกิดเหตุ</p>
+        </div>
+      </div>
+
+      <div class="s-title">การทวนสอบ (Verification)</div>
+      <div class="verif-grid">
+        <div class="verif-card">
+          <h4>👷 พนักงานผลิต</h4>
+          <p>ตรวจสอบสภาพใบมีดทุกครั้งที่เปลี่ยน Jumbo Roll (CCP1) หรือทุกม้วน (CCP2) และบันทึกทุกครั้ง</p>
+        </div>
+        <div class="verif-card">
+          <h4>👨‍💼 หัวหน้างาน</h4>
+          <p>ทวนสอบการตรวจสอบสภาพใบมีดทุกครั้งที่เปลี่ยน Jumbo Roll และตรวจสอบบันทึกประจำวัน</p>
+        </div>
+        <div class="verif-card">
+          <h4>🔬 QA Department</h4>
+          <p>ทวนสอบบันทึก CCP (PRPs Verification) <strong>1 ครั้งต่อเดือน</strong> และตรวจพิสูจน์ยืนยัน <strong>ปีละ 1 ครั้ง</strong></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="foot-banner">
+      <div class="ft">ตรวจก่อนผลิต · แจ้งทันทีเมื่อพบปัญหา · บันทึกทุกครั้ง</div>
+      <div class="fs">ความปลอดภัยของผลิตภัณฑ์ เริ่มต้นจากทุกคน</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TAB 3 : QUIZ
+       ══════════════════════════════════════ -->
+  <div id="tab-quiz" class="sec">
+    <div class="quiz-wrap">
+      <div class="quiz-hdr">
+        <h2>📝 แบบทดสอบความเข้าใจ</h2>
+        <p>HACCP Plan &amp; Food Safety Control Notice · 5 ข้อ · 4 ตัวเลือก</p>
+      </div>
+
+      <!-- Employee info -->
+      <div class="emp-form">
+        <div class="ef">
+          <label>ชื่อ - นามสกุล *</label>
+          <input type="text" id="emp-name" placeholder="กรุณากรอกชื่อ-นามสกุล">
+        </div>
+        <div class="ef">
+          <label>แผนก *</label>
+          <select id="emp-dept">
+            <option value="">-- เลือกแผนก --</option>
+          </select>
+        </div>
+        <div class="ef full">
+          <label>ตำแหน่ง</label>
+          <input type="text" id="emp-pos" placeholder="เช่น พนักงานผลิต / หัวหน้างาน / QC">
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="prog-wrap">
+        <div class="prog-info">
+          <span id="prog-text">ตอบแล้ว 0 / 5 ข้อ</span>
+          <span id="prog-pct">0%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+      </div>
+
+      <!-- Questions rendered by JS -->
+      <div id="q-container"></div>
+
+      <div class="quiz-foot">
+        <button id="submit-btn" onclick="submitQuiz()">✅ ส่งคำตอบ</button>
+        <div id="result-box">
+          <div class="score-ring" id="score-ring">
+            <span class="sr-num" id="sr-num">0</span>
+            <span class="sr-tot">/ 5</span>
+          </div>
+          <div class="res-pct" id="res-pct">0%</div>
+          <div class="res-msg" id="res-msg"></div>
+          <div class="res-sub" id="res-sub"></div>
+          <div id="submit-status"></div>
+          <br>
+          <button id="retry-btn" onclick="resetQuiz()">🔄 ทำแบบทดสอบอีกครั้ง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+/* ══════════════════════════════════════════
+   CONFIG (อ่าน/เขียน localStorage)
+══════════════════════════════════════════ */
+let CFG = {
+  gsUrl: '',
+  company: 'บริษัท สยาม โทเซลโล จำกัด',
+  depts: ['ฝ่ายผลิต','ฝ่าย QA / QC','ฝ่ายคลังสินค้า','ฝ่ายวิศวกรรม','ฝ่าย HR / ธุรการ','ฝ่ายจัดซื้อ']
+};
+function loadCfg() {
+  try {
+    const s = sessionStorage.getItem('haccp_cfg');
+    if (s) CFG = JSON.parse(s);
+  } catch(e){}
+}
+function saveCfg() {
+  try { sessionStorage.setItem('haccp_cfg', JSON.stringify(CFG)); } catch(e){}
+}
+function applyConfig() {
+  document.getElementById('company-disp').textContent  = CFG.company;
+  document.getElementById('company-disp2').textContent = CFG.company;
+  const sel = document.getElementById('emp-dept');
+  sel.innerHTML = '<option value="">-- เลือกแผนก --</option>';
+  CFG.depts.forEach(d => {
+    const o = document.createElement('option'); o.value = o.textContent = d; sel.appendChild(o);
+  });
+  const dot   = document.getElementById('conn-dot');
+  const label = document.getElementById('conn-label');
+  if (CFG.gsUrl) {
+    dot.className = 'status-dot on';
+    label.textContent = 'เชื่อมต่อแล้ว — ผลจะบันทึกไปยัง Google Sheets อัตโนมัติ';
+  } else {
+    dot.className = 'status-dot off';
+    label.textContent = 'ยังไม่ได้เชื่อมต่อ — ผลจะไม่ถูกบันทึก';
+  }
+}
+
+function openSetup() {
+  document.getElementById('gs-url').value       = CFG.gsUrl;
+  document.getElementById('cfg-company').value  = CFG.company;
+  document.getElementById('cfg-depts').value    = CFG.depts.join('\n');
+  document.getElementById('setup-modal').classList.add('open');
+}
+function closeSetup() { document.getElementById('setup-modal').classList.remove('open'); }
+function saveSetup() {
+  CFG.gsUrl   = document.getElementById('gs-url').value.trim();
+  CFG.company = document.getElementById('cfg-company').value.trim() || CFG.company;
+  CFG.depts   = document.getElementById('cfg-depts').value
+                  .split('\n').map(d=>d.trim()).filter(Boolean);
+  saveCfg(); applyConfig(); closeSetup();
+}
+
+/* ══════════════════════════════════════════
+   TAB
+══════════════════════════════════════════ */
+function showTab(id) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  event.currentTarget.classList.add('on');
+}
+
+/* ══════════════════════════════════════════
+   QUESTIONS
+══════════════════════════════════════════ */
+const QS = [
+  {
+    cat: 'Food Safety Incident',
+    q: 'เมื่อพบใบมีดหรือคัตเตอร์แตกหักระหว่างการผลิต พนักงานต้องทำอะไรเป็นอันดับแรก?',
+    opts: [
+      'แจ้ง QC ให้มาตรวจสอบผลิตภัณฑ์ก่อน',
+      'หยุดเครื่องจักรและหยุดผลิตทันที',
+      'เก็บชิ้นส่วนใบมีดให้ครบก่อน แล้วค่อยแจ้งหัวหน้า',
+      'ทำความสะอาดพื้นที่ก่อนเพื่อความปลอดภัย'
+    ],
+    ans: 1,
+    explain: 'ขั้นตอนแรกที่สำคัญที่สุดคือ "หยุดเครื่องจักรและหยุดผลิตทันที" เพื่อป้องกันไม่ให้ผลิตภัณฑ์ที่อาจปนเปื้อนออกไปมากกว่าเดิม ก่อนดำเนินการขั้นตอนอื่นๆ'
+  },
+  {
+    cat: 'HACCP · CCP1-P',
+    q: 'กระบวนการ Slitting (CCP1-P) กำหนดให้ตรวจสอบสภาพใบมีดเมื่อใด และโดยใคร?',
+    opts: [
+      'ตรวจสอบสัปดาห์ละครั้ง โดยหัวหน้างาน',
+      'ตรวจสอบทุกครั้งที่เปลี่ยน Jumbo Roll โดยพนักงานผลิต',
+      'ตรวจสอบเดือนละครั้ง โดยฝ่าย QA',
+      'ตรวจสอบเฉพาะเมื่อพบความผิดปกติของผลิตภัณฑ์'
+    ],
+    ans: 1,
+    explain: 'CCP1-P กำหนดชัดเจนว่า: What = ตรวจสอบสภาพใบมีด, When = ทุกครั้งที่มีการเปลี่ยน Jumbo Roll, Who = พนักงานผลิต, Where = ที่จุดปฏิบัติงาน'
+  },
+  {
+    cat: 'Preventive Control',
+    q: 'เหตุใดจึงห้ามนำ "หมุดเข็ม / หมุดโลหะ / วัตถุแหลมคม" เข้ามาในพื้นที่การผลิต?',
+    opts: [
+      'เพราะอาจทำให้เครื่องจักรเสียหาย',
+      'เพราะเป็น Physical Hazard ที่ตรวจจับได้ยาก ไม่สอดคล้อง GHP/HACCP/FSSC 22000',
+      'เพราะวัตถุโลหะทำให้คุณภาพฟิล์มลดลง',
+      'เพราะผิดกฎความปลอดภัยด้านแรงงานเท่านั้น'
+    ],
+    ans: 1,
+    explain: 'วัตถุแหลมคมเป็น Physical Hazard ที่มีความเสี่ยงต่อการปนเปื้อนในผลิตภัณฑ์ ไม่สามารถควบคุมการสูญหายได้ และไม่สอดคล้องกับมาตรฐาน GHP / HACCP / FSSC 22000'
+  },
+  {
+    cat: 'HACCP · CCP2-P',
+    q: 'กระบวนการ Re-Slit (CCP2-P) กำหนดให้เปลี่ยนใบมีดทุกๆ กี่วัน และในช่วงเดือนใด?',
+    opts: [
+      'ทุก 30 วัน ทุกเดือน',
+      'ทุก 90 วัน เดือน มี.ค. และ ก.ย.',
+      'ทุก 180 วัน เดือน มิ.ย. และ ธ.ค.',
+      'ทุก 365 วัน ปีละครั้ง'
+    ],
+    ans: 2,
+    explain: 'CCP2-P กำหนดให้ "เปลี่ยนใบมีด" ทุก 180 วัน (เดือนมิถุนายนและธันวาคม) ส่วนการ "สลับใบมีด" ทำทุก 90 วัน (มีนาคมและกันยายน) โดยพนักงานฝ่ายผลิต'
+  },
+  {
+    cat: 'Verification',
+    q: 'ฝ่าย QA มีหน้าที่ในการทวนสอบ HACCP อย่างไร?',
+    opts: [
+      'ตรวจสอบใบมีดทุกวัน แทนพนักงานผลิต',
+      'ทวนสอบบันทึก CCP 1 ครั้งต่อเดือน และตรวจพิสูจน์ยืนยันปีละ 1 ครั้ง',
+      'อนุมัติการเปลี่ยนใบมีดทุกครั้งก่อนที่พนักงานจะดำเนินการ',
+      'รับผิดชอบเฉพาะการตรวจสอบผลิตภัณฑ์สำเร็จรูปเท่านั้น'
+    ],
+    ans: 1,
+    explain: 'QA ทำการทวนสอบบันทึกจุด CCP (PRPs Verification) 1 ครั้งต่อเดือน และทำการตรวจพิสูจน์ยืนยัน (Validation) ปีละ 1 ครั้ง เพื่อให้มั่นใจว่าระบบ HACCP ยังคงมีประสิทธิผล'
+  }
+];
+
+let userAns = new Array(QS.length).fill(null);
+let submitted = false;
+const LETTERS = ['ก','ข','ค','ง'];
+
+function renderQ() {
+  const c = document.getElementById('q-container');
+  c.innerHTML = '';
+  QS.forEach((q, qi) => {
+    const optsHtml = q.opts.map((o,oi) => `
+      <button class="opt" id="opt-${qi}-${oi}" onclick="pick(${qi},${oi})">
+        <span class="ol">${LETTERS[oi]}</span>${o}
+      </button>`).join('');
+    c.innerHTML += `
+      <div class="q-card" id="qc-${qi}">
+        <div class="q-num">ข้อที่ ${qi+1} / ${QS.length}</div>
+        <div class="q-cat">${q.cat}</div>
+        <div class="q-text">${q.q}</div>
+        <div class="opts">${optsHtml}</div>
+        <div class="fb" id="fb-${qi}"></div>
+      </div>`;
+  });
+}
+
+function pick(qi, oi) {
+  if (submitted) return;
+  userAns[qi] = oi;
+  // reset visuals
+  QS[qi].opts.forEach((_,i) => {
+    const b = document.getElementById(`opt-${qi}-${i}`);
+    b.className = 'opt';
+  });
+  document.getElementById(`opt-${qi}-${oi}`).classList.add('sel');
+  document.getElementById(`qc-${qi}`).classList.add('ans');
+  // progress
+  const n = userAns.filter(a => a !== null).length;
+  document.getElementById('prog-fill').style.width = `${n/QS.length*100}%`;
+  document.getElementById('prog-text').textContent = `ตอบแล้ว ${n} / ${QS.length} ข้อ`;
+  document.getElementById('prog-pct').textContent  = `${Math.round(n/QS.length*100)}%`;
+}
+
+function submitQuiz() {
+  if (submitted) return;
+  const name = document.getElementById('emp-name').value.trim();
+  const dept = document.getElementById('emp-dept').value;
+  if (!name) { alert('กรุณากรอกชื่อ-นามสกุลก่อนส่ง'); return; }
+  if (!dept)  { alert('กรุณาเลือกแผนกก่อนส่ง'); return; }
+  if (userAns.includes(null)) {
+    alert(`กรุณาตอบให้ครบทุกข้อ (ยังไม่ได้ตอบ ${userAns.filter(a=>a===null).length} ข้อ)`);
+    return;
+  }
+  submitted = true;
+  document.getElementById('submit-btn').disabled = true;
+
+  let score = 0;
+  QS.forEach((q,qi) => {
+    const ok = userAns[qi] === q.ans;
+    if (ok) score++;
+    q.opts.forEach((_,oi) => {
+      const b = document.getElementById(`opt-${qi}-${oi}`);
+      b.disabled = true;
+      b.className = 'opt';
+      if (oi === q.ans) b.classList.add('correct');
+      else if (oi === userAns[qi] && !ok) b.classList.add('wrong');
+    });
+    const fb = document.getElementById(`fb-${qi}`);
+    fb.classList.add('show');
+    if (ok) {
+      fb.classList.add('ok');
+      fb.textContent = '✅ ' + q.explain;
+    } else {
+      fb.classList.add('bad');
+      fb.textContent = `❌ คำตอบที่ถูกคือ "${LETTERS[q.ans]}. ${q.opts[q.ans]}" — ${q.explain}`;
+    }
+  });
+
+  // Show result
+  const pct = Math.round(score/QS.length*100);
+  const ring = document.getElementById('score-ring');
+  const color = score===5 ? '#22C55E' : score>=4 ? '#F7B731' : score>=3 ? '#F97316' : '#EF4444';
+  ring.style.borderColor = color;
+  ring.style.color = color;
+  document.getElementById('sr-num').textContent = score;
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-pct').style.color = color;
+
+  const msgs = [
+    { min:5, msg:'🏆 ยอดเยี่ยม! เข้าใจครบทุกหัวข้อ', sub:'คุณพร้อมปฏิบัติตามมาตรฐาน HACCP และ Food Safety ได้อย่างมั่นใจ' },
+    { min:4, msg:'👍 ดีมาก! เกือบสมบูรณ์', sub:'ลองทบทวนข้อที่ตอบผิดเพื่อเสริมความเข้าใจให้ครบถ้วน' },
+    { min:3, msg:'📚 ผ่านเกณฑ์ แต่ควรทบทวนเพิ่ม', sub:'กรุณาอ่าน Poster และ HACCP Plan อีกครั้งก่อนปฏิบัติงาน' },
+    { min:0, msg:'❗ ต้องศึกษาเพิ่มเติม', sub:'กรุณาศึกษาเอกสาร Food Safety Control Notice และ HACCP Plan อย่างละเอียด' }
+  ];
+  const r = msgs.find(m => score >= m.min);
+  document.getElementById('res-msg').textContent = r.msg;
+  document.getElementById('res-sub').textContent = r.sub;
+  document.getElementById('result-box').style.display = 'block';
+  document.getElementById('result-box').scrollIntoView({behavior:'smooth',block:'center'});
+
+  // Send to Google Sheets
+  sendToSheets({ name, dept,
+    position: document.getElementById('emp-pos').value.trim() || '-',
+    score, pct: pct+'%', result: r.msg
+  });
+}
+
+async function sendToSheets(data) {
+  if (!CFG.gsUrl) return;
+  const st = document.getElementById('submit-status');
+  st.className = 'sending';
+  st.textContent = '⏳ กำลังบันทึกผลไปยัง Google Sheets...';
+  const now = new Date();
+  const payload = {
+    date: now.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}),
+    time: now.toLocaleTimeString('th-TH'),
+    name: data.name, dept: data.dept, position: data.position,
+    score: data.score, percent: data.pct, result: data.result
+  };
+  try {
+    await fetch(CFG.gsUrl, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    st.className = 'success';
+    st.textContent = '✅ บันทึกผลลง Google Sheets เรียบร้อยแล้ว';
+  } catch(e) {
+    st.className = 'err';
+    st.textContent = '⚠️ ไม่สามารถบันทึกได้ กรุณาตรวจสอบการเชื่อมต่อ';
+  }
+}
+
+function resetQuiz() {
+  userAns = new Array(QS.length).fill(null);
+  submitted = false;
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('result-box').style.display = 'none';
+  document.getElementById('submit-status').className = '';
+  document.getElementById('prog-fill').style.width = '0%';
+  document.getElementById('prog-text').textContent = 'ตอบแล้ว 0 / 5 ข้อ';
+  document.getElementById('prog-pct').textContent  = '0%';
+  document.getElementById('emp-name').value = '';
+  document.getElementById('emp-dept').value = '';
+  document.getElementById('emp-pos').value  = '';
+  renderQ();
+  document.getElementById('tab-quiz').scrollIntoView({behavior:'smooth'});
+}
+
+// Init
+loadCfg();
+applyConfig();
+renderQ();
+</script>
+</body>
+</html>

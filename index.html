@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -492,13 +491,15 @@ hr.div { border:none; height:1px; background:linear-gradient(to right,transparen
   var sh = ss.getSheetByName("ผลแบบทดสอบ") || ss.insertSheet("ผลแบบทดสอบ");
   if (sh.getLastRow() === 0) {
     sh.appendRow(["วันที่","เวลา","ชื่อ-นามสกุล","แผนก","รหัสพนักงาน",
-                  "คะแนน","เปอร์เซ็นต์","ผลการทดสอบ"]);
-    sh.getRange(1,1,1,8).setFontWeight("bold")
+                  "คะแนน","เปอร์เซ็นต์","ผลการทดสอบ",
+                  "ข้อ1","ข้อ2","ข้อ3","ข้อ4","ข้อ5"]);
+    sh.getRange(1,1,1,13).setFontWeight("bold")
       .setBackground("#D62828").setFontColor("white");
   }
   var d = JSON.parse(e.postData.contents);
   sh.appendRow([d.date,d.time,d.name,d.dept,d.empCode,
-                d.score,d.percent,d.result]);
+                d.score,d.percent,d.result,
+                d.ans1,d.ans2,d.ans3,d.ans4,d.ans5]);
   return ContentService.createTextOutput("OK")
     .setMimeType(ContentService.MimeType.TEXT);
 }
@@ -1108,7 +1109,7 @@ function submitQuiz() {
   document.getElementById('result-box').style.display = 'block';
   document.getElementById('result-box').scrollIntoView({behavior:'smooth',block:'center'});
 
-  sendToSheets({ name, dept, empCode, score, pct: pct+'%', result: r.msg });
+  sendToSheets({ name, dept, empCode, score, pct: pct+'%', result: r.msg, answers: userAns });
 }
 
 async function sendToSheets(data) {
@@ -1117,15 +1118,24 @@ async function sendToSheets(data) {
   st.className = 'sending';
   st.textContent = '⏳ กำลังบันทึกผลไปยัง Google Sheets...';
   const now = new Date();
+  const LETTERS = ['ก','ข','ค','ง'];
+  const ansLabels = data.answers.map((a, i) =>
+    a !== null ? `${LETTERS[a]}. ${QS[i].opts[a]}` : '-'
+  );
   const payload = {
     date: now.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}),
     time: now.toLocaleTimeString('th-TH'),
     name: data.name,
     dept: data.dept,
-    empCode: data.empCode,   // ← รหัสพนักงาน
+    empCode: data.empCode,
     score: data.score,
     percent: data.pct,
-    result: data.result
+    result: data.result,
+    ans1: ansLabels[0],
+    ans2: ansLabels[1],
+    ans3: ansLabels[2],
+    ans4: ansLabels[3],
+    ans5: ansLabels[4]
   };
   try {
     await fetch(CFG.gsUrl, {
